@@ -1,0 +1,144 @@
+<!-- A. Hero -->
+<section class="hero" aria-labelledby="hero-title">
+  <app-hero-visual />
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="hero-copy wrap" #heroCopy>
+    <p class="eyebrow" data-in>Sculptural silver jewelry</p>
+    <h1 id="hero-title" class="display h1" data-in>Wear what<br />remains.</h1>
+    <p class="lede" data-in>Sculptural silver. Uncompromising character. Discover pieces that make their presence felt.</p>
+    <div class="ctas" data-in>
+      <a class="btn btn-primary" routerLink="/shop">Explore the Collection <app-icon name="arrow" /></a>
+      <a class="btn btn-ghost" routerLink="/our-story">Discover RELIK</a>
+    </div>
+  </div>
+</section>
+
+<!-- B. Featured -->
+<section class="section wrap" aria-labelledby="featured-title">
+  <header class="sec-head" appReveal>
+    <div>
+      <p class="eyebrow">01 — Featured</p>
+      <h2 id="featured-title" class="display h2">The first pieces.</h2>
+    </div>
+    <a class="link" routerLink="/shop">View all pieces</a>
+  </header>
+
+  @switch (catalog.status()) {
+    @case ('loading') {
+      <div class="grid4" aria-busy="true" aria-label="Loading products">
+        @for (i of [1, 2, 3, 4]; track i) { <div class="skeleton"></div> }
+      </div>
+    }
+    @case ('error') {
+      <p class="notice">The collection couldn't load. <button class="link-btn" type="button" (click)="catalog.load()">Try again</button></p>
+    }
+    @default {
+      <div class="grid4">
+        @for (p of catalog.featured(); track p.id; let i = $index) {
+          <app-product-card [product]="p" appReveal [style.transition-delay.ms]="i * 80" />
+        }
+      </div>
+    }
+  }
+</section>
+
+<!-- C. Shop by category -->
+<section class="section wrap cats-sec" aria-labelledby="cats-title">
+  <header class="sec-head" appReveal>
+    <div>
+      <p class="eyebrow">02 — Categories</p>
+      <h2 id="cats-title" class="display h2">Choose your weight.</h2>
+    </div>
+  </header>
+  <div class="cats">
+    <a class="cat cat-chains" routerLink="/collections/chains" appReveal>
+      <img src="products/link-chain-photo.webp" alt="" width="1200" height="1200" loading="lazy" />
+      <span class="cat-label"><span class="eyebrow">Category</span><span class="display">Chains</span><span class="muted">Weight you can see.</span></span>
+    </a>
+    <a class="cat cat-rings" routerLink="/collections/rings" appReveal>
+      <img src="products/monolith-signet-photo.png" alt="" width="1200" height="1200" loading="lazy" />
+      <span class="cat-label"><span class="display">Rings</span><span class="muted">Architecture for the hand.</span></span>
+    </a>
+    <a class="cat cat-bracelets" routerLink="/collections/bracelets" appReveal>
+      <img src="products/shackle-cuff-photo.png" alt="" width="1200" height="1200" loading="lazy" />
+      <span class="cat-label"><span class="display">Bracelets</span><span class="muted">Noticed at the wrist.</span></span>
+    </a>
+    <a class="cat cat-pendants" routerLink="/collections/pendants" appReveal>
+      <span class="cat-label"><span class="eyebrow">Category</span><span class="display">Pendants</span><span class="muted">A single, deliberate mark.</span></span>
+      <img src="products/sigil-pendant-photo.png" alt="" width="1200" height="1200" loading="lazy" />
+    </a>
+  </div>
+</section>
+
+<!-- D. Brand statement -->
+<section class="statement" aria-labelledby="statement-title">
+  <div class="wrap">
+    <h2 id="statement-title" class="display" appReveal>Not made<br /><em>to blend in.</em></h2>
+    <div class="statement-body" appReveal>
+      <p class="lede">RELIK makes silver jewelry with presence: weighty forms, deliberate edges and surfaces that hold the light. Pieces for people who would rather be remembered than matched.</p>
+      <a class="link" routerLink="/our-story">Read our story</a>
+    </div>
+  </div>
+</section>
+
+<!-- E. Product spotlight -->
+@if (spotlight(); as p) {
+  <section class="section wrap spotlight" aria-labelledby="spot-title">
+    <div class="spot-media" appReveal>
+      <img class="main" [src]="p.images[0].src" [alt]="p.images[0].alt" width="1200" height="1200" loading="lazy" />
+      @if (p.images[1]) {
+        <img class="detail" [src]="p.images[1].src" [alt]="p.images[1].alt" width="1200" height="1200" loading="lazy" />
+      }
+    </div>
+    <div class="spot-copy" appReveal>
+      <p class="eyebrow">03 — Spotlight</p>
+      <h2 id="spot-title" class="display h3"><a [routerLink]="['/product', p.slug]">{{ p.name }}</a></h2>
+      <p class="muted desc">{{ p.description }}</p>
+      <app-product-purchase [product]="p" />
+    </div>
+  </section>
+}
+
+<!-- F. Design details -->
+<section class="section wrap details" aria-labelledby="details-title">
+  <header class="sec-head" appReveal>
+    <div>
+      <p class="eyebrow">04 — Design language</p>
+      <h2 id="details-title" class="display h2">How a RELIK<br />piece is drawn.</h2>
+    </div>
+  </header>
+  <ol class="detail-list" role="list">
+    <li appReveal>
+      <span class="num display">I</span>
+      <h3>Sculptural forms</h3>
+      <p class="muted">Every piece starts as a shape before it becomes jewelry. Curves are drawn with intent; edges stay where they belong.</p>
+    </li>
+    <li appReveal>
+      <span class="num display">II</span>
+      <h3>Contrasting textures</h3>
+      <p class="muted">Mirror polish set against rippled, cut and broken surfaces, so light moves across a piece instead of sitting on it.</p>
+    </li>
+    <li appReveal>
+      <span class="num display">III</span>
+      <h3>Substantial silhouettes</h3>
+      <p class="muted">Proportions read from a distance. The goal is presence: pieces that hold their own without competing for it.</p>
+    </li>
+  </ol>
+</section>
+
+<!-- G. Editorial banner -->
+<section class="after-dark" aria-labelledby="ad-title">
+  <img src="products/link-chain-detail.webp" alt="" width="1200" height="1200" loading="lazy" />
+  <div class="ad-shade" aria-hidden="true"></div>
+  <div class="wrap ad-copy" appReveal>
+    <p class="eyebrow">Concept collection</p>
+    <h2 id="ad-title" class="display">After<br />Dark</h2>
+    <p class="lede">Heavier links, sharper silhouettes. A study in polish under low light.</p>
+    <a class="btn btn-primary" routerLink="/shop" [queryParams]="{ sort: 'price-desc' }">Enter After Dark <app-icon name="arrow" /></a>
+  </div>
+</section>
+
+<!-- H. Newsletter -->
+<section class="section wrap" aria-labelledby="nl-title">
+  <app-newsletter />
+</section>

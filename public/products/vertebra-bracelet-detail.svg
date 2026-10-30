@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="300 300 600 600" width="1200" height="1200">
+<defs>
+  <radialGradient id="bg" cx="50%" cy="38%" r="75%">
+    <stop offset="0" stop-color="#1f1f1f"/><stop offset=".55" stop-color="#121212"/><stop offset="1" stop-color="#080808"/>
+  </radialGradient>
+  <linearGradient id="m" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#5f6368"/><stop offset=".2" stop-color="#f3f5f7"/><stop offset=".42" stop-color="#8e949a"/>
+    <stop offset=".6" stop-color="#e6e9ec"/><stop offset=".82" stop-color="#555a60"/><stop offset="1" stop-color="#c7ccd1"/>
+  </linearGradient>
+  <linearGradient id="m2" x1="1" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#7a7f85"/><stop offset=".35" stop-color="#eef1f3"/><stop offset=".55" stop-color="#6b7076"/><stop offset="1" stop-color="#d5d9dd"/>
+  </linearGradient>
+  <filter id="sh" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000" flood-opacity=".7"/>
+  </filter>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .05 0"/></filter>
+</defs>
+<rect x="-2000" y="-2000" width="6000" height="6000" fill="url(#bg)"/>
+<ellipse cx="600" cy="1010" rx="380" ry="40" fill="#000" opacity=".55"/>
+<g filter="url(#sh)"><ellipse cx="900.0" cy="600.0" rx="62" ry="38" transform="rotate(90.0 900.0 600.0)" fill="none" stroke="url(#m)" stroke-width="20"/><rect x="810.3" y="702.8" width="120" height="20" rx="10" transform="rotate(115.7 870.3 712.8)" fill="url(#m2)"/><ellipse cx="787.0" cy="803.3" rx="62" ry="38" transform="rotate(141.4 787.0 803.3)" fill="none" stroke="url(#m)" stroke-width="20"/><rect x="606.8" y="843.5" width="120" height="20" rx="10" transform="rotate(167.1 666.8 853.5)" fill="url(#m2)"/><ellipse cx="533.2" cy="853.5" rx="62" ry="38" transform="rotate(192.9 533.2 853.5)" fill="none" stroke="url(#m)" stroke-width="20"/><rect x="353.0" y="793.3" width="120" height="20" rx="10" transform="rotate(218.6 413.0 803.3)" fill="url(#m2)"/><ellipse cx="329.7" cy="712.8" rx="62" ry="38" transform="rotate(244.3 329.7 712.8)" fill="none" stroke="url(#m)" stroke-width="20"/><rect x="240.0" y="590.0" width="120" height="20" rx="10" transform="rotate(270.0 300.0 600.0)" fill="url(#m2)"/><ellipse cx="329.7" cy="487.2" rx="62" ry="38" transform="rotate(295.7 329.7 487.2)" fill="none" stroke="url(#m)" stroke-width="20"/><rect x="353.0" y="386.7" width="120" height="20" rx="10" transform="rotate(321.4 413.0 396.7)" fill="url(#m2)"/><ellipse cx="533.2" cy="346.5" rx="62" ry="38" transform="rotate(347.1 533.2 346.5)" fill="none" stroke="url(#m)" stroke-width="20"/><rect x="606.8" y="336.5" width="120" height="20" rx="10" transform="rotate(372.9 666.8 346.5)" fill="url(#m2)"/><ellipse cx="787.0" cy="396.7" rx="62" ry="38" transform="rotate(398.6 787.0 396.7)" fill="none" stroke="url(#m)" stroke-width="20"/><rect x="810.3" y="477.2" width="120" height="20" rx="10" transform="rotate(424.3 870.3 487.2)" fill="url(#m2)"/></g>
+<rect x="-2000" y="-2000" width="6000" height="6000" filter="url(#grain)"/>
+<text x="340" y="860" font-family="Georgia, serif" font-size="10" letter-spacing="4" fill="#A39F97" opacity=".55">ILLUSTRATION · PHOTO TO COME</text>
+</svg>

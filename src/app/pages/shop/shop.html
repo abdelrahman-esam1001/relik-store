@@ -1,0 +1,127 @@
+@if (unknownCategory()) {
+  <section class="page-head wrap">
+    <p class="eyebrow">Collection</p>
+    <h1 class="display h2">Not found.</h1>
+    <p class="lede">There's no collection called “{{ collection() }}”.</p>
+    <p class="back"><a class="btn btn-ghost" routerLink="/shop">Shop all pieces</a></p>
+  </section>
+} @else {
+  <header class="page-head wrap">
+    <p class="eyebrow">{{ categoryInfo() ? 'Collection' : 'Shop' }}</p>
+    <h1 class="display h1">{{ categoryInfo()?.name ?? 'All pieces' }}</h1>
+    <p class="lede">{{ categoryInfo()?.tagline ?? 'Chains, rings, bracelets and pendants. Demo catalog — products and prices are placeholders.' }}</p>
+    <nav class="cat-tabs" aria-label="Categories">
+      <a routerLink="/shop" [class.on]="!routeCategory()" [attr.aria-current]="!routeCategory() ? 'page' : null">All</a>
+      @for (c of catalog.categories; track c.id) {
+        <a [routerLink]="['/collections', c.id]" [class.on]="routeCategory() === c.id" [attr.aria-current]="routeCategory() === c.id ? 'page' : null">{{ c.name }}</a>
+      }
+    </nav>
+  </header>
+
+  <div class="wrap layout">
+    <ng-template #panel>
+      <form class="filters" role="search" aria-label="Filter products" (submit)="$event.preventDefault()">
+        <div class="field">
+          <label for="f-q">Search</label>
+          <input id="f-q" type="search" [value]="filters().q" placeholder="Name or keyword"
+            (input)="update({ q: $any($event.target).value }, true)" />
+        </div>
+
+        @if (!routeCategory()) {
+          <fieldset>
+            <legend>Category</legend>
+            <label class="check"><input type="radio" name="f-cat" [checked]="!filters().category" (change)="update({ category: null })" /> All</label>
+            @for (c of catalog.categories; track c.id) {
+              <label class="check"><input type="radio" name="f-cat" [checked]="filters().category === c.id" (change)="update({ category: c.id })" /> {{ c.name }}</label>
+            }
+          </fieldset>
+        }
+
+        <fieldset>
+          <legend>Price (USD)</legend>
+          <div class="price-row">
+            <div class="field">
+              <label for="f-min">Min</label>
+              <input id="f-min" type="number" inputmode="numeric" min="0" step="10" [value]="filters().min ?? ''"
+                (change)="update({ min: price($any($event.target).value) })" />
+            </div>
+            <div class="field">
+              <label for="f-max">Max</label>
+              <input id="f-max" type="number" inputmode="numeric" min="0" step="10" [value]="filters().max ?? ''"
+                (change)="update({ max: price($any($event.target).value) })" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Availability</legend>
+          <label class="check"><input type="checkbox" [checked]="filters().inStock" (change)="update({ inStock: $any($event.target).checked })" /> Hide sold out</label>
+        </fieldset>
+
+        @if (activeCount()) {
+          <button class="btn btn-ghost" type="button" (click)="clear()">Clear filters ({{ activeCount() }})</button>
+        }
+      </form>
+    </ng-template>
+
+    <aside class="side" aria-label="Filters">
+      <ng-container [ngTemplateOutlet]="panel" />
+    </aside>
+
+    <section class="results" aria-labelledby="results-count">
+      <div class="toolbar">
+        <p id="results-count" class="muted" aria-live="polite">
+          @if (catalog.status() === 'ready') { {{ results().length }} {{ results().length === 1 ? 'piece' : 'pieces' }} }
+          @else if (catalog.status() === 'loading') { Loading… }
+        </p>
+        <div class="tools">
+          <button class="btn btn-ghost filter-btn" type="button" (click)="filtersOpen.set(true)" aria-haspopup="dialog">
+            Filters @if (activeCount()) { ({{ activeCount() }}) }
+          </button>
+          <label class="sort">
+            <span class="sr-only">Sort by</span>
+            <select [value]="filters().sort" (change)="update({ sort: $any($event.target).value })">
+              @for (s of sorts; track s.value) { <option [value]="s.value" [selected]="filters().sort === s.value">{{ s.label }}</option> }
+            </select>
+          </label>
+        </div>
+      </div>
+
+      @switch (catalog.status()) {
+        @case ('loading') {
+          <div class="grid" aria-busy="true">@for (i of [1,2,3,4,5,6]; track i) { <div class="skeleton"></div> }</div>
+        }
+        @case ('error') {
+          <div class="empty"><p class="lede">The catalog couldn't load.</p><button class="btn btn-ghost" type="button" (click)="catalog.load()">Try again</button></div>
+        }
+        @default {
+          @if (results().length) {
+            <div class="grid">
+              @for (p of results(); track p.id; let i = $index) { <app-product-card [product]="p" [eager]="i < 3" /> }
+            </div>
+          } @else {
+            <div class="empty">
+              <p class="display h3">Nothing matches.</p>
+              <p class="muted">Try a different search, widen the price range or show sold-out pieces.</p>
+              <button class="btn btn-ghost" type="button" (click)="clear()">Clear filters</button>
+            </div>
+          }
+        }
+      }
+    </section>
+  </div>
+
+  @if (filtersOpen()) {
+    <div class="drawer-host">
+      <div class="scrim" (click)="filtersOpen.set(false)" aria-hidden="true"></div>
+      <div class="drawer" role="dialog" aria-modal="true" aria-label="Filters" appFocusTrap (escape)="filtersOpen.set(false)">
+        <div class="drawer-top">
+          <span class="eyebrow">Filters</span>
+          <button class="icon-btn" type="button" (click)="filtersOpen.set(false)" aria-label="Close filters" autofocus><app-icon name="close" /></button>
+        </div>
+        <ng-container [ngTemplateOutlet]="panel" />
+        <button class="btn btn-primary btn-block show" type="button" (click)="filtersOpen.set(false)">Show {{ results().length }} pieces</button>
+      </div>
+    </div>
+  }
+}
